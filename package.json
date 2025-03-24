@@ -1,0 +1,20 @@
+{
+  "name": "crypto-price-prediction-dashboard",
+  "version": "1.0.0",
+  "description": "A Dashboard to allow users to predict the price of cryptocurrencies using AI",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard/issues"
+  },
+  "homepage": "https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard#readme"
+}

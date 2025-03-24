@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard/issues"
   },
-  "homepage": "https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard#readme"
+  "homepage": "https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard#readme",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  }
 }

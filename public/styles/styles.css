@@ -137,7 +137,7 @@ p{
 }
 
 .about-icons:hover{
-    color: #00c6ff
+    color: #00c6ff;
 }
 
 
@@ -230,3 +230,32 @@ p{
 }
 
 /** ======= FOOTER STYLING ======= **/
+footer {
+    background: #111619;
+    color: #fff;
+    padding: 2em 1em;
+    text-align: center;
+}
+
+.footer-heading{
+    font-size: 40px;
+}
+
+.social-icon{
+    margin: 50px 20px 50px 20px;
+    
+}
+
+.social-icon:hover{
+    color:#00c6ff;
+
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2em;
+}

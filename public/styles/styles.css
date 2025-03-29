@@ -259,3 +259,63 @@ footer {
     flex-wrap: wrap;
     gap: 2em;
 }
+/* === SELECTION PAGE STYLING === */
+#select-section{
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom right, #1a1a1a, #000000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* == Main Container Styling == */
+.main-select{
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    width: 350px;
+}
+
+/* == Form Groups == */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #bbb;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* === Submit Button === */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to bottom right, #657fa8, #041f4a);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-submit:hover {
+    background: linear-gradient(45deg, #ccd5e3, #708ab3);
+}

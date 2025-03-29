@@ -3,7 +3,48 @@
 
 
 
+<section id="select-section">
 
+    <div class="container main-select">
+        <h1>Select your Crypto & Timeframe</h1>
+        <!-- FORM FOR USER DATA-->
+         <form action="/fetch-data" method="post">
+            <!--Crypto Selection Drop Down-->
+            <div class="form-group">
+                <label for="crypto">Choose a Cryptocurrency:</label>
+                <select name="crypto" id="crypto" required>
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Etherium</option>
+                    <option value="XRP">Ripple (XRP)</option>
+                    <option value="ADA">Cardano (ADA)</option>
+                    <option value="SOL">Solana (SOL)</option>
+                </select>
+            </div>
+            <!-- Time frame Drop Down-->
+            <div class="form-group">
+                <label for="timeframe">Select a historical Data Type:</label>
+                <select name="timeframe" id="timeframe" required>
+                    <option value="daily">Daily</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                    <option value="historical">Historical</option>
+                </select>
+            </div>
+
+            <!--Submit Button-->
+            <button type="submit" class="btn-submit">
+                <i class="fa-solid fa-chart-line"></i> Get Predictions
+            </button>
+
+
+
+         </form>
+      
+       
+
+    </div>
+
+</section>
 
 
 

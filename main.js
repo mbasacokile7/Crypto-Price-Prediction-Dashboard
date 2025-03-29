@@ -15,8 +15,11 @@ const port = 3000;
 // Set the view engine
 app.set('view engine', 'ejs');
 
-//Allow express to access the static
+//Allow express to access the public folder for static files
 app.use(express.static("public"));
+
+// Use the body Parser middleware to get the user data 
+app.use(bodyParser.urlencoded({extended:true}));
 
 
 
@@ -28,6 +31,11 @@ app.get("/", async (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
   });
 
+
+// Create a route to go to the selection page
+app.get("/select", (req, res) =>{
+  res.render("selection");
+})
 
 
 

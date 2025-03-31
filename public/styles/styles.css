@@ -261,7 +261,6 @@ footer {
 }
 /* === SELECTION PAGE STYLING === */
 #select-section{
-    font-family: 'Poppins', sans-serif;
     background: linear-gradient(to bottom right, #1a1a1a, #000000);
     color: white;
     display: flex;

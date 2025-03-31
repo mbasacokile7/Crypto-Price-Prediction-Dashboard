@@ -3,6 +3,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import env from "dotenv";
+import cors from "cors";
 
 //When dealing with files, we use native node packages
 import { dirname } from "path";
@@ -26,6 +27,9 @@ app.set('view engine', 'ejs');
 
 //Allow express to access the public folder for static files
 app.use(express.static("public"));
+
+//Allow Express to use CORS
+app.use(cors());
 
 // Use the body Parser middleware to get the user data 
 app.use(bodyParser.urlencoded({extended:true}));
@@ -67,6 +71,25 @@ app.post("/fetch-data", async (req, res) =>{
   try {
     const response = await axios.get(apiURL);
     console.log(response.data["Meta Data"]);
+
+    // Get Only the time series data:
+    const timeSeriesData = response.data["Time Series (Digital Currency Daily"];
+
+    // Convert the data to usable format
+    let formattedData = Object.keys(timeSeriesData).map(date =>({
+      ds: date, //Get the Timestamp || Date Stamp
+      y: parseFloat(timeSeriesData["date"]["4. close"]) // Getting the closing price for each datapoint
+    })).reverse() // Having the data in chronological order
+
+    // Send the formatted data to the Python API for predictions
+    const pythonRespnse = await axios.post("http://127.0.0.1:5001/predict", {data: formattedData})
+
+    //Get the forecasts from the Python Server
+    const forecastData = pythonRespnse.data;
+
+    //Render the Predictions on a dashboard
+    res.render("dashboard", {actualData: formattedData, forecastData});
+
   } catch (error) {
       console.log(error)
   }

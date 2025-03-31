@@ -1,5 +1,51 @@
 <%- include('partials/header'); %>
 
+<h1>Bitcoin Price Prediction</h1>
+    <canvas id="priceChart"></canvas>
+
+    <script>
+        const actualData = <%= JSON.stringify(actualData) %>;
+        const forecastData = <%= JSON.stringify(forecastData) %>;
+
+        // Extracting date and price from data
+        const actualDates = actualData.map(d => d.ds);
+        const actualPrices = actualData.map(d => d.y);
+
+        const forecastDates = forecastData.map(d => d.ds);
+        const forecastPrices = forecastData.map(d => d.yhat);
+
+        // Draw Chart
+        const ctx = document.getElementById("priceChart").getContext("2d");
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [...actualDates, ...forecastDates],
+                datasets: [
+                    {
+                        label: "Actual Prices",
+                        data: actualPrices,
+                        borderColor: "blue",
+                        fill: false
+                    },
+                    {
+                        label: "Predicted Prices",
+                        data: [...Array(actualPrices.length).fill(null), ...forecastPrices], 
+                        borderColor: "red",
+                        borderDash: [5, 5],
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: "Date" } },
+                    y: { title: { display: true, text: "Price (USD)" } }
+                }
+            }
+        });
+    </script>
+
 
 
 

@@ -65,30 +65,32 @@ app.post("/fetch-data", async (req, res) =>{
   }
 
   // API URL
-  const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=EUR&apikey=" + apiKey;
+  const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=USD&apikey=" + apiKey;
 
   // Make API call using Axios
   try {
     const response = await axios.get(apiURL);
-    console.log(response.data["Meta Data"]);
 
     // Get Only the time series data:
-    const timeSeriesData = response.data["Time Series (Digital Currency Daily"];
+    const timeSeriesData = response.data["Time Series (Digital Currency Daily)"];
 
     // Convert the data to usable format
     let formattedData = Object.keys(timeSeriesData).map(date =>({
       ds: date, //Get the Timestamp || Date Stamp
-      y: parseFloat(timeSeriesData["date"]["4. close"]) // Getting the closing price for each datapoint
+      y: parseFloat(timeSeriesData[date]["4. close"]) // Getting the closing price for each datapoint
     })).reverse() // Having the data in chronological order
 
     // Send the formatted data to the Python API for predictions
-    const pythonRespnse = await axios.post("http://127.0.0.1:5001/predict", {data: formattedData})
+    // TODO: Send Data to Python Server for Predictions
+    //const pythonRespnse = await axios.post("http://127.0.0.1:5001/predict", {data: formattedData})
 
     //Get the forecasts from the Python Server
-    const forecastData = pythonRespnse.data;
+    // TODO: Take forecast data from Python server to render on Chart
+    //const forecastData = pythonRespnse.data;
 
     //Render the Predictions on a dashboard
-    res.render("dashboard", {actualData: formattedData, forecastData});
+    //TODO: Send over forecastData to be rendered as well
+    res.render("dashboard", {actualData: formattedData});
 
   } catch (error) {
       console.log(error)

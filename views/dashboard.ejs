@@ -2,31 +2,36 @@
 
 <h1>Bitcoin Price Prediction</h1>
     <canvas id="priceChart"></canvas>
-
+    <!-- ChartJS CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const actualData = <%= JSON.stringify(actualData) %>;
-        const forecastData = <%= JSON.stringify(forecastData) %>;
+        const actualData = <%- JSON.stringify(actualData) %>;
+        console.log(actualData);
+        //TODO: Create a variable for ForecastData
+
 
         // Extracting date and price from data
         const actualDates = actualData.map(d => d.ds);
         const actualPrices = actualData.map(d => d.y);
-
-        const forecastDates = forecastData.map(d => d.ds);
-        const forecastPrices = forecastData.map(d => d.yhat);
+        //TODO: Mapthe forecast data to the coorect format
+        
 
         // Draw Chart
         const ctx = document.getElementById("priceChart").getContext("2d");
         new Chart(ctx, {
             type: "line",
             data: {
-                labels: [...actualDates, ...forecastDates],
+                //TODO: Include the forecastData Labels
+                labels: [...actualDates],
                 datasets: [
                     {
                         label: "Actual Prices",
                         data: actualPrices,
                         borderColor: "blue",
                         fill: false
-                    },
+                    }/*,
+                    // TODO: Include the Predicted Prices Data
+                    
                     {
                         label: "Predicted Prices",
                         data: [...Array(actualPrices.length).fill(null), ...forecastPrices], 
@@ -34,6 +39,7 @@
                         borderDash: [5, 5],
                         fill: false
                     }
+                    */
                 ]
             },
             options: {

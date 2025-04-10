@@ -54,6 +54,7 @@ app.post("/fetch-data", async (req, res) =>{
 
   //get the timeframe that the user wants
   let userTimeFrame = "";
+  console.log(req.body.timeframe);
 
   // Need an if statement to get the proper API Function
   if (req.body.timeframe === "Daily"){
@@ -63,9 +64,9 @@ app.post("/fetch-data", async (req, res) =>{
   } else {
     userTimeFrame = "DIGITAL_CURRENCY_MONTHLY";
   }
-
+  console.log(userTimeFrame);
   // API URL
-  const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=USD&apikey=" + apiKey;
+  const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=USD&apikey=demo";
 
   // Make API call using Axios
   try {

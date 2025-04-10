@@ -318,3 +318,37 @@ select {
 .btn-submit:hover {
     background: linear-gradient(45deg, #ccd5e3, #708ab3);
 }
+/* === DASHBOARD PAGE STYLING === */
+#dashboard-section{
+    background: linear-gradient(to bottom right, #1a1a1a, #000000);
+    color: white;
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chart-container-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Push to center vertically */
+    padding: 1rem;
+    overflow-x: auto; /* Enable horizontal scroll if needed */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px; /* Control the max width */
+    min-width: 600px;   /* Allow scroll if data is too long */
+    height: 400px;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }

@@ -2,11 +2,19 @@
 
 <section id="dashboard-section">
     <h1>Bitcoin Price Prediction</h1>
+    <!-- Chart Display-->
     <div class="chart-container-wrapper">
         <div class="chart-container">
           <canvas id="priceChart"></canvas>
         </div>
       </div>
+    <!--Insights Display-->
+    <div class="insight-card">
+        <h2>Bitcoin Price Insights (Past Year)</h2>
+        <div id="insight-content">
+            <p><%- insights %></p>
+        </div>
+      </div>      
 </section>
 
 

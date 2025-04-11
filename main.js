@@ -20,7 +20,10 @@ env.config();
 const port = process.env.PORT;
 
 // Store my AlphaVantage API-Key in an environment variable
-const apiKey = process.env.API_KEY
+const apiKey = process.env.API_KEY;
+
+//Deep Seek API KEy
+const deepseekAPI_Key = process.env.DeepSeek_API_KEY;
 
 // Set the view engine
 app.set('view engine', 'ejs');
@@ -66,14 +69,15 @@ app.post("/fetch-data", async (req, res) =>{
   }
   console.log(userTimeFrame);
   // API URL
-  const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=USD&apikey=demo";
+  const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=USD&apikey=" + apiKey;
 
   // Make API call using Axios
   try {
     const response = await axios.get(apiURL);
 
     // Get Only the time series data:
-    const timeSeriesData = response.data["Time Series (Digital Currency Daily)"];
+    let dataIndex = `Time Series (Digital Currency ${req.body.timeframe})`
+    const timeSeriesData = response.data[dataIndex];
 
     // Convert the data to usable format
     let formattedData = Object.keys(timeSeriesData).map(date =>({
@@ -91,7 +95,43 @@ app.post("/fetch-data", async (req, res) =>{
 
     //Render the Predictions on a dashboard
     //TODO: Send over forecastData to be rendered as well
-    res.render("dashboard", {actualData: formattedData});
+
+    // Header for sending the request:
+    const headers = {
+      "Authorization": `Bearer ${deepseekAPI_Key}`,
+      "Content-Type": "application/json",
+    };
+
+
+    // Get Insights from DeepSeek-v3
+    const deepSeekURL = 'https://openrouter.ai/api/v1/chat/completions';
+    let prompt = `You are a professional crypto analyst. 
+                  In plain and concise language, summarize the recent price trends, volatility, and key events that influenced the price of ${userCoin} over the past year. 
+                  Highlight any patterns, milestones, or macroeconomic factors that traders should be aware of. Conclude with a brief outlook for short-term movements based on recent behavior. 
+                  Keep it educational, objective, and avoid overwhelming detail.`
+    let insight_data = {
+      "model": "deepseek/deepseek-chat-v3-0324:free",
+      "messages": [{"role": "user", "content": prompt }]
+    
+    }
+    let modelInsights = "";
+    try {
+      
+      let insight_response = await axios.post(deepSeekURL, insight_data, {
+        headers: headers
+      });
+
+      //console.log(insight_response.data);
+      modelInsights = insight_response.data.choices[0].message.content;
+
+      
+    } catch (error) {
+      console.log(`There was an error getting insights: ${error}`);
+    }
+
+
+    // Render Everything in the dashboard
+    res.render("dashboard", {actualData: formattedData, insights: modelInsights});
 
   } catch (error) {
       console.log(error)

@@ -329,7 +329,7 @@ select {
     height: 100vh;
     margin: 0;
 }
-
+/* = Chart STYLING = */
 .chart-container-wrapper {
     display: flex;
     justify-content: center;
@@ -352,3 +352,28 @@ select {
     width: 100% !important;
     height: auto !important;
   }
+/* = Insights Section STYLING = */
+.insight-card {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(to bottom right, #222, #111);
+    color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+  
+  .insight-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #00ffcc;
+  }
+  
+  .insight-card p, .insight-card ul, .insight-card li {
+    font-size: 1rem;
+  }
+  

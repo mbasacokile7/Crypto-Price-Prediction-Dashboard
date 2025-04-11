@@ -71,32 +71,20 @@ app.post("/fetch-data", async (req, res) =>{
   // API URL
   const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=USD&apikey=" + apiKey;
 
-  // Make API call using Axios
-  try {
-    const response = await axios.get(apiURL);
+  // ==== AXIOS POST REQUESTS ==== ///
 
-    // Get Only the time series data:
-    let dataIndex = `Time Series (Digital Currency ${req.body.timeframe})`
-    const timeSeriesData = response.data[dataIndex];
+  // Get CryptoData from AlphaVantage
+  function getCryptoData(){
+    return axios.get(apiURL);
 
-    // Convert the data to usable format
-    let formattedData = Object.keys(timeSeriesData).map(date =>({
-      ds: date, //Get the Timestamp || Date Stamp
-      y: parseFloat(timeSeriesData[date]["4. close"]) // Getting the closing price for each datapoint
-    })).reverse() // Having the data in chronological order
-
-    // Send the formatted data to the Python API for predictions
-    // TODO: Send Data to Python Server for Predictions
-    //const pythonRespnse = await axios.post("http://127.0.0.1:5001/predict", {data: formattedData})
-
-    //Get the forecasts from the Python Server
-    // TODO: Take forecast data from Python server to render on Chart
-    //const forecastData = pythonRespnse.data;
-
-    //Render the Predictions on a dashboard
-    //TODO: Send over forecastData to be rendered as well
-
-    // Header for sending the request:
+  }
+  // Send Data to model for predictions
+  function sendCryptoData(){
+    
+    
+  }
+  // Get DeepSeek Crypto Insights using OpenRouter API
+  function getInsights(){
     const headers = {
       "Authorization": `Bearer ${deepseekAPI_Key}`,
       "Content-Type": "application/json",
@@ -114,29 +102,69 @@ app.post("/fetch-data", async (req, res) =>{
       "messages": [{"role": "user", "content": prompt }]
     
     }
-    let modelInsights = "";
-    try {
-      
-      let insight_response = await axios.post(deepSeekURL, insight_data, {
-        headers: headers
-      });
 
-      //console.log(insight_response.data);
-      modelInsights = insight_response.data.choices[0].message.content;
-
-      
-    } catch (error) {
-      console.log(`There was an error getting insights: ${error}`);
-    }
-
-
-    // Render Everything in the dashboard
-    res.render("dashboard", {actualData: formattedData, insights: modelInsights});
-
-  } catch (error) {
-      console.log(error)
+    return axios.post(deepSeekURL, insight_data, {
+      headers: headers
+    });
+    
   }
-  
+
+  // Store the API responses in global variables
+  let alphaVatageResponse
+  let deepSeekResponse
+
+  // Use Promises.all() to make the requests at the same time
+  try {
+    [alphaVatageResponse, deepSeekResponse] = await Promise.all([getCryptoData(), getInsights()]);
+    
+  } catch (error) {
+    console.log(error)
+  }
+
+  // =========================== Payload Preprocessing =========================== //
+  // ========Crypto Data ========//
+  // Get Only the time series data:
+  let dataIndex = `Time Series (Digital Currency ${req.body.timeframe})`
+  const timeSeriesData = alphaVatageResponse.data[dataIndex];
+
+  // Convert the data to usable format
+  let formattedData = Object.keys(timeSeriesData).map(date =>({
+    ds: date, //Get the Timestamp || Date Stamp
+    y: parseFloat(timeSeriesData[date]["4. close"]) // Getting the closing price for each datapoint
+  })).reverse() // Having the data in chronological order
+
+  // ========Crypto Data for Python server ========//
+  // Send the formatted data to the Python API for predictions
+    // TODO: Send Data to Python Server for Predictions
+    //const pythonRespnse = await axios.post("http://127.0.0.1:5001/predict", {data: formattedData})
+
+    //Get the forecasts from the Python Server
+    // TODO: Take forecast data from Python server to render on Chart
+    //const forecastData = pythonRespnse.data;
+
+    //Render the Predictions on a dashboard
+    //TODO: Send over forecastData to be rendered as well
+
+  // ========Deep Seek Response ========//
+
+  // Function to Edit the model response
+  function formatInsightText(rawText) {
+    return rawText
+      .replace(/###\s?\*\*(.*?)\*\*/g, '<h3>$1</h3>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n- /g, '<li>')
+      .replace(/\n\d+\. /g, '<li>')
+      .replace(/\n/g, '<br>');
+  }
+
+  // Preprocessing
+  let modelInsights = deepSeekResponse.data.choices[0].message.content;
+  let formattedInsights = formatInsightText(modelInsights);
+
+  // Render Everything in the dashboard
+  res.render("dashboard", {actualData: formattedData, insights: formattedInsights});
+
+ 
 
 });
 

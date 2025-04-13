@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Chart with Date Range Filter</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+    background: #111;
+    color: #fff;
+    font-family: sans-serif;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #chart-container {
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    position: relative;
+  }
+
+  .date-filter {
+    margin-bottom: 1rem;
+  }
+  </style>
+</head>
+<body>
+
+    <h1>Crypto Dashboard</h1>
+    
+    <select id="dateRangeSelect" onchange="filterDataByRange()">
+      <option value="7">Last 7 days</option>
+      <option value="14">Last 14 days</option>
+      <option value="30" selected>Last 30 days</option>
+      <option value="90">Last 90 days</option>
+      <option value="all">All</option>
+    </select>
+    
+    <div id="chart-container">
+      <canvas id="cryptoChart"></canvas>
+    </div>
+
+  <canvas id="cryptoChart"></canvas>
+
+  <script>
+    // Simulated backend data (chronological)
+    const actualData = [
+      { ds: "2025-04-01", y: 1.09112 },
+      { ds: "2025-04-02", y: 1.09497 },
+      { ds: "2025-04-03", y: 1.09564 },
+      { ds: "2025-04-04", y: 1.09503 },
+      { ds: "2025-04-05", y: 1.09755 },
+      { ds: "2025-04-06", y: 1.09918 },
+      { ds: "2025-04-07", y: 1.08881 },
+      { ds: "2025-04-08", y: 1.09565 },
+      { ds: "2025-04-09", y: 1.09503 },
+      { ds: "2025-04-10", y: 1.11888 },
+      { ds: "2025-04-11", y: 1.13580 }
+    ];
+
+    let chartInstance;
+
+    function renderChart(data) {
+      const labels = data.map(d => d.ds);
+      const prices = data.map(d => d.y);
+      const ctx = document.getElementById("cryptoChart").getContext("2d");
+
+      if (chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Crypto Price",
+            data: prices,
+            borderColor: "rgba(0,255,204,1)",
+            fill: false,
+            backgroundColor: "rgba(0,255,204,0.1)",
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: {
+                color: '#ccc',
+                callback: function (val, index) {
+                  const dateObj = new Date(labels[index]);
+                  return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+              },
+              grid: { display: false }
+            },
+            y: {
+              ticks: { color: '#ccc' },
+              grid: { display: false }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#ccc' } }
+          }
+        }
+      });
+    }
+
+    // Initial chart
+    renderChart(actualData);
+
+  function filterDataByRange() {
+      const range = document.getElementById("dateRangeSelect").value;
+      let filtered;
+
+      if (range === "all") {
+        filtered = actualData;
+      } else {
+        const count = parseInt(range);
+        filtered = actualData.slice(-count); // Get last N entries
+      }
+
+      const labels = filtered.map(d => d.ds);
+      const prices = filtered.map(d => d.y);
+
+      // Update chart
+      chartInstance.data.labels = labels;
+      chartInstance.data.datasets[0].data = prices;
+      chartInstance.update();
+    }
+  </script>
+</body>
+</html>

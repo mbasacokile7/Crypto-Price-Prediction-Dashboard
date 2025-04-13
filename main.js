@@ -162,7 +162,7 @@ app.post("/fetch-data", async (req, res) =>{
   let formattedInsights = formatInsightText(modelInsights);
 
   // Render Everything in the dashboard
-  res.render("dashboard", {actualData: formattedData, insights: formattedInsights});
+  res.render("dashboard", {actualData: formattedData, insights: formattedInsights, userCoin:userCoin});
 
  
 

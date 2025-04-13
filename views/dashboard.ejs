@@ -1,51 +1,125 @@
 <%- include('partials/header'); %>
+<section class="dashboard-sections">
+    <h1><%- userCoin %> Price Prediction and Insights</h1>
+    <div class="container py-4 dashboard-container-1">
+        <div class="row g-3">
+            <!-- Chart Column -->
+            <div class="col-md-8">
+                <div class="chart-box position-relative">
+                    <h5 id="Chart-title"><%- userCoin %> Crypto Price Chart</h5>
+                    <div class="d-flex justify-content-end align-items-center flex-wrap gap-2 mb-3">
+                        <select id="coinSelect" class="form-select form-select-sm bg-dark text-white border-0 chart-select"
+                            style="width: auto;">
+                            <option value="BTC">Bitcoin (BTC)</option>
+                            <option value="ETH">Ethereum (ETH)</option>
+                            <option value="XRP">Ripple (XRP)</option>
+                            <option value="SOL">Solana (SOL)</option>
+                            <option value="ADA">Cardano (ADA)</option>
+                        </select>
 
-<section id="dashboard-section">
-    <h1>Bitcoin Price Prediction</h1>
-    <!-- Chart Display-->
-    <div class="chart-container-wrapper">
-        <div class="chart-container">
-          <canvas id="priceChart"></canvas>
+                        <select id="timeframeSelect" class="form-select form-select-sm bg-dark text-white border-0 chart-select"
+                            style="width: auto;">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <canvas id="cryptoChart" width="100%" height="100%"></canvas>
+                </div>
+            </div>
+
+            <!-- Metrics Column -->
+            <div class="col-md-4">
+                <div class="row g-3">
+                    <!-- Current Price -->
+                    <div class="col-12">
+                        <div class="metric-box text-center">
+                            <div class="metric-title">Current Price (USD)</div>
+                            <div class="metric-value text-success" id="currentPrice">$65,820.96</div>
+                        </div>
+                    </div>
+
+                    <!-- % Gain and Volatility -->
+                    <div class="col-12">
+                        <div class="row g-2">
+                            <!-- Percentage Gain -->
+                            <div class="col-6">
+                                <div class="metric-box text-center">
+                                    <div class="metric-title">Gain</div>
+                                    <div class="metric-value text-success" id="percentageGain">+12.5%</div>
+                                </div>
+                            </div>
+                            <!-- Volatility -->
+                            <div class="col-6">
+                                <div class="metric-box text-center">
+                                    <div class="metric-title">Volatility</div>
+                                    <div class="metric-value text-warning" id="percentageVolatility">2.1%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    <!--Insights Display-->
-    <div class="insight-card">
-        <h2>Bitcoin Price Insights (Past Year)</h2>
-        <div id="insight-content">
-            <p><%- insights %></p>
+
+        <!-- AI Insights -->
+        <div class="container py-4">
+            <h1>Deep Seek Insights</h1>
+            <div><%- insights %></div>
         </div>
-      </div>      
+    </div>
 </section>
-
-
-
     <!-- ChartJS CDN-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        const userCoin = "<%- userCoin %>";
         const actualData = <%- JSON.stringify(actualData) %>;
-        console.log(actualData);
+        
         //TODO: Create a variable for ForecastData
 
 
         // Extracting date and price from data
-        const actualDates = actualData.map(d => d.ds);
-        const actualPrices = actualData.map(d => d.y);
+        const labels = actualData.map(d => d.ds);
+        const prices = actualData.map(d => d.y);
+        console.log(labels)
+
+        // Define tick positions: start, middle, end
+        const total = labels.length;
+        const tickIndices = [0, Math.floor(total / 2), total - 1];
+        const tickValues = tickIndices.map(i => labels[i]);
+
+        // Price Metrics
+        const currentPrice = prices[prices.length - 1];
+        const startPrice = prices[0];
+        const gain = ((currentPrice - startPrice) / startPrice) * 100;
+        const volatility = calcVolatility(prices);
+
+        // Change the metrics data based on calculations
+        document.getElementById('currentPrice').textContent = `$${currentPrice.toFixed(2)}`;
+        document.getElementById('percentageGain').textContent = `${gain.toFixed(2)}%`;
+        document.getElementById('percentageVolatility').textContent = `${volatility.toFixed(2)}%`;
+
+
         //TODO: Mapthe forecast data to the coorect format
         
 
         // Draw Chart
-        const ctx = document.getElementById("priceChart").getContext("2d");
+        const ctx = document.getElementById("cryptoChart").getContext("2d");
         new Chart(ctx, {
             type: "line",
             data: {
                 //TODO: Include the forecastData Labels
-                labels: [...actualDates],
+                labels: labels,
                 datasets: [
                     {
-                        label: "Actual Prices",
-                        data: actualPrices,
-                        borderColor: "blue",
-                        fill: false
+                        label: `${userCoin}Crypto Price`,
+                        data: prices,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: true,
+                        backgroundColor: createGradient(ctx),
+                        tension: 0.4,
+                        pointRadius: 0
                     }/*,
                     // TODO: Include the Predicted Prices Data
                     
@@ -62,12 +136,56 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: { padding: { bottom: 70 } },
                 scales: {
-                    x: { title: { display: true, text: "Date" } },
-                    y: { title: { display: true, text: "Price (USD)" } }
+                    x: {
+                        type: 'category',
+                        ticks: {
+                            color: '#ccc',
+                            autoSkip: false, // ensure all ticks are considered
+                            callback: function (value, index) {
+                                const label = labels[index];
+                                if (tickValues.includes(label)) {
+                                    const dateObj = new Date(label);
+                                    return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); // "Apr 12"
+                                }
+                                return '';
+                            },
+                            maxRotation: 0,   // Prevent rotation
+                            minRotation: 0,   // Prevent rotation
+                        },
+                        grid: { display: false }
+                    },
+                    y: {
+                        ticks: { color: '#ccc' },
+                        grid: { display: false }
+                    }
+                    
+                },
+                plugins: {
+                    legend: { display: false }
                 }
+
             }
         });
+        // Capitalize string helper function
+            function capitalize(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+            // Volatility calculation (standard deviation)
+            function calcVolatility(prices) {
+                const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
+                const variance = prices.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / prices.length;
+                return Math.sqrt(variance);
+            }
+        // Gradient helper for line chart
+            function createGradient(ctx) {
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, 'rgba(0, 255, 204, 0.3)');
+                gradient.addColorStop(1, 'rgba(0, 255, 204, 0)');
+                return gradient;
+            }
     </script>
 
 

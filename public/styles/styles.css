@@ -318,62 +318,75 @@ select {
 .btn-submit:hover {
     background: linear-gradient(45deg, #ccd5e3, #708ab3);
 }
-/* === DASHBOARD PAGE STYLING === */
-#dashboard-section{
+/* === DASHBOARD STYLING === */
+.dashboard-sections {
     background: linear-gradient(to bottom right, #1a1a1a, #000000);
     color: white;
     display: flex;
-    flex-direction: column; /* Stack children vertically */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     margin: 0;
 }
-/* = Chart STYLING = */
-.chart-container-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh; /* Push to center vertically */
-    padding: 1rem;
-    overflow-x: auto; /* Enable horizontal scroll if needed */
-    -webkit-overflow-scrolling: touch;
-  }
+/*== Chart % Metrics Div Styling ==*/
 
-  .chart-container {
+.chart-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    height: 300px;
+    overflow: hidden;
     position: relative;
-    width: 100%;
-    max-width: 1000px; /* Control the max width */
-    min-width: 600px;   /* Allow scroll if data is too long */
-    height: 400px;
-  }
-
-  canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
-/* = Insights Section STYLING = */
-.insight-card {
+    border-radius: 12px;
+    padding: 2rem 1.5rem 1.5rem;
     max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: linear-gradient(to bottom right, #222, #111);
+    margin: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chart-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Drop Down Styling */
+.dropdown-container {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+}
+
+.chart-select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: #3a3a4d;
     color: #fff;
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    font-family: 'Segoe UI', sans-serif;
-    overflow-x: auto;
-    line-height: 1.6;
-    height: 80vh;
-  }
-  
-  .insight-card h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    text-align: center;
-    
-  }
-  
-  .insight-card p, .insight-card ul, .insight-card li {
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.metric-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.metric-title {
     font-size: 1rem;
-  }
+    color: white;
+
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
   

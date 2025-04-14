@@ -1,6 +1,7 @@
 <%- include('partials/header'); %>
 <section class="dashboard-sections">
     <h1><%- userCoin %> Price Prediction and Insights</h1>
+    
     <div class="container py-4 dashboard-container-1">
         <div class="row g-3">
             <!-- Chart Column -->
@@ -60,6 +61,20 @@
         </div>
     </div>
 </section>
+<!--Script for Loader-->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem("showLoader") === "true") {
+            document.getElementById("loader").style.display = "flex";
+
+            // optional: remove the loader after a short delay or when everything is ready
+            window.addEventListener("load", () => {
+                document.getElementById("loader").style.display = "none";
+                localStorage.removeItem("showLoader");
+            });
+        }
+    });
+</script>
     <!-- ChartJS CDN-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -135,6 +150,16 @@
 
                 const labels = filtered.map(d => d.ds);
                 const prices = filtered.map(d => d.y);
+                // Update Price Metrics
+                const currentPrice = prices[prices.length - 1];
+                const startPrice = prices[0];
+                const gain = ((currentPrice - startPrice) / startPrice) * 100;
+                const volatility = calcVolatility(prices);
+
+                // Change the metrics data based on calculations
+                document.getElementById('currentPrice').textContent = `$${currentPrice.toFixed(2)}`;
+                document.getElementById('percentageGain').textContent = `${gain.toFixed(2)}%`;
+                document.getElementById('percentageVolatility').textContent = `${volatility.toFixed(2)}%`;
 
                 chartInstance.data.labels = labels;
                 chartInstance.data.datasets[0].data = prices;

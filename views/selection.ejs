@@ -2,13 +2,20 @@
 
 
 
+<!-- Loader -->
 
 <section id="select-section">
+    <div id="loader" style="display: none;">
+        <div class="spinner"
+            style="border: 8px solid #f3f3f3; border-top: 8px solid #00ffcc; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;">
+        </div>
+        <p style="margin-top: 10px; color: white; font-size: 16px;">Fetching data, please wait...</p>
+    </div>
 
     <div class="container main-select">
         <h1>Select your Crypto & Timeframe</h1>
         <!-- FORM FOR USER DATA-->
-         <form action="/fetch-data" method="post">
+         <form id="selectionForm" action="/fetch-data" method="post">
             <!--Crypto Selection Drop Down-->
             <div class="form-group">
                 <label for="crypto">Choose a Cryptocurrency:</label>
@@ -36,6 +43,14 @@
             <button type="submit" class="btn-submit">
                 <i class="fa-solid fa-chart-line"></i> Get Predictions
             </button>
+            <script>
+                const form = document.getElementById('selectionForm');
+                const loader = document.getElementById('loader');
+
+                form.addEventListener('submit', () => {
+                    loader.style.display = 'flex'; // Show the loader before the form is submitted
+                });
+            </script>
 
 
 

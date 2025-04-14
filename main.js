@@ -54,20 +54,20 @@ app.post("/fetch-data", async (req, res) =>{
 
   // Get the cryptocurrency the user wnats
   const userCoin = req.body.crypto;
-
+  const selectedTimeFrame = req.body.timeframe;
   //get the timeframe that the user wants
   let userTimeFrame = "";
-  console.log(req.body.timeframe);
+  
 
   // Need an if statement to get the proper API Function
-  if (req.body.timeframe === "Daily"){
+  if (selectedTimeFrame === "Daily"){
     userTimeFrame = "DIGITAL_CURRENCY_DAILY";
-  } else if (req.body.timeframe === "Weekly"){
+  } else if (selectedTimeFrame === "Weekly"){
     userTimeFrame = "DIGITAL_CURRENCY_WEEKLY";
   } else {
     userTimeFrame = "DIGITAL_CURRENCY_MONTHLY";
   }
-  console.log(userTimeFrame);
+  
   // API URL
   const apiURL = "https://www.alphavantage.co/query?function=" + userTimeFrame + "&symbol=" + userCoin + "&market=USD&apikey=" + apiKey;
 
@@ -162,7 +162,7 @@ app.post("/fetch-data", async (req, res) =>{
   let formattedInsights = formatInsightText(modelInsights);
 
   // Render Everything in the dashboard
-  res.render("dashboard", {actualData: formattedData, insights: formattedInsights, userCoin:userCoin});
+  res.render("dashboard", {actualData: formattedData, insights: formattedInsights, userCoin:userCoin, selectedTimeFrame: selectedTimeFrame});
 
  
 
@@ -174,3 +174,7 @@ app.post("/fetch-data", async (req, res) =>{
 app.listen(port, ()=>{
     console.log(`The server is running on Port: ${port}`);
 });
+
+
+
+

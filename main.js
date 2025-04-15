@@ -93,10 +93,31 @@ app.post("/fetch-data", async (req, res) =>{
 
     // Get Insights from DeepSeek-v3
     const deepSeekURL = 'https://openrouter.ai/api/v1/chat/completions';
-    let prompt = `You are a professional crypto analyst. 
-                  In plain and concise language, summarize the recent price trends, volatility, and key events that influenced the price of ${userCoin} over the past year. 
-                  Highlight any patterns, milestones, or macroeconomic factors that traders should be aware of. Conclude with a brief outlook for short-term movements based on recent behavior. 
-                  Keep it educational, objective, and avoid overwhelming detail.`
+    let prompt  = `You are a financial analyst assistant helping crypto traders and investors.
+
+                   Given the following parameters:
+
+                                                  - Coin: ${userCoin}
+                                                  - Timeframe:${selectedTimeFrame} from 2024 to 2025
+
+                  Based on this, generate an HTML-formatted report with:
+
+                                              1. A brief and concise summary overview of the coin’s performance and market sentiment during the timeframe.
+                                              2. Key Trends : List 3–5 bullet points outlining price movements, volume spikes, volatility shifts, or general momentum.
+                                              3. Key Influences: List relevant events, news, economic indicators, or social trends that impacted the coin’s behavior.
+                                              4. A closing summary with strategic insights that might help traders, investors, or analysts make informed decisions.
+
+                  ⚠️ The output should be fully formatted in HTML using:
+
+                                              - <h2>for section headings and <h3> for sub headings
+                                              - <ul><li> for bullet points
+                                              - <p> for body text
+                                              - Use <strong> for key points where relevant
+                                              - The response should only be the content, Do Not Include the header meta-data
+
+                  Avoid including actual price predictions. Focus on analytical insights and trends only.`;
+
+                  
     let insight_data = {
       "model": "deepseek/deepseek-chat-v3-0324:free",
       "messages": [{"role": "user", "content": prompt }]
@@ -147,19 +168,10 @@ app.post("/fetch-data", async (req, res) =>{
 
   // ========Deep Seek Response ========//
 
-  // Function to Edit the model response
-  function formatInsightText(rawText) {
-    return rawText
-      .replace(/###\s?\*\*(.*?)\*\*/g, '<h3>$1</h3>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n- /g, '<li>')
-      .replace(/\n\d+\. /g, '<li>')
-      .replace(/\n/g, '<br>');
-  }
-
+ 
   // Preprocessing
   let modelInsights = deepSeekResponse.data.choices[0].message.content;
-  let formattedInsights = formatInsightText(modelInsights);
+  let formattedInsights = cleanLLMHtmlResponse(modelInsights);
 
   // Render Everything in the dashboard
   res.render("dashboard", {actualData: formattedData, insights: formattedInsights, userCoin:userCoin, selectedTimeFrame: selectedTimeFrame});
@@ -168,13 +180,16 @@ app.post("/fetch-data", async (req, res) =>{
 
 });
 
+//function to clean OpenRouter LLM response to proper html
+function cleanLLMHtmlResponse(rawContent) {
+    return rawContent
+        .replace(/```html\s*/i, '')  // Remove opening code fence
+        .replace(/```$/, '')         // Remove closing code fence
+        .trim();                     // Remove extra whitespace
+}
 
 
   // Initialise the Server on Port 3000(Can change)
 app.listen(port, ()=>{
     console.log(`The server is running on Port: ${port}`);
 });
-
-
-
-

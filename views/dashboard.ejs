@@ -148,23 +148,45 @@
                     filtered = actualData.slice(-safeCount);
                 }
 
-                const labels = filtered.map(d => d.ds);
-                const prices = filtered.map(d => d.y);
-                // Update Price Metrics
-                const currentPrice = prices[prices.length - 1];
-                const startPrice = prices[0];
-                const gain = ((currentPrice - startPrice) / startPrice) * 100;
-                const volatility = calcVolatility(prices);
+                const filteredLabels = filtered.map(d => d.ds);
+                const filteredPrices = filtered.map(d => d.y);
 
-                // Change the metrics data based on calculations
+                // Define tick positions: start, middle, end
+                const total = filteredLabels.length;
+                const tickIndices = [0, Math.floor(total / 2), total - 1];
+                const tickValues = tickIndices.map(i => filteredLabels[i]);
+
+                // Update price metrics
+                const currentPrice = filteredPrices[filteredPrices.length - 1];
+                const startPrice = filteredPrices[0];
+                const gain = ((currentPrice - startPrice) / startPrice) * 100;
+                const volatility = calcVolatility(filteredPrices);
+
                 document.getElementById('currentPrice').textContent = `$${currentPrice.toFixed(2)}`;
                 document.getElementById('percentageGain').textContent = `${gain.toFixed(2)}%`;
                 document.getElementById('percentageVolatility').textContent = `${volatility.toFixed(2)}%`;
 
-                chartInstance.data.labels = labels;
-                chartInstance.data.datasets[0].data = prices;
+                // Set new data to chart
+                chartInstance.data.labels = filteredLabels;
+                chartInstance.data.datasets[0].data = filteredPrices;
+
+                // Update x-axis tick formatter
+                chartInstance.options.scales.x.ticks.callback = function (value, index) {
+                    const label = chartInstance.data.labels[index];
+                    if (tickValues.includes(label)) {
+                        const dateObj = new Date(label);
+                        return dateObj.toLocaleDateString('en-US', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: '2-digit'
+                        });
+                    }
+                    return '';
+                };
+
                 chartInstance.update();
             }
+
 
 
         // Define tick positions: start, middle, end
@@ -231,7 +253,7 @@
                                     const label = labels[index];
                                     if (tickValues.includes(label)) {
                                         const dateObj = new Date(label);
-                                        return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); // "Apr 12"
+                                        return dateObj.toLocaleDateString('en-US', {day: 'numeric', month: 'short', year:"2-digit"}); // "Apr 12"
                                     }
                                     return '';
                                 },

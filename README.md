@@ -77,10 +77,10 @@ npm main.js
 ## 📸 Screenshots
 
 ### Dashboard View
-![SELECTION PAGE](assets/SELECTION_PAGE.png)
+![SELECTION PAGE]([assets/SELECTION_PAGE.png](https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard/blob/main/SELECTION_PAGE.PNG))
 
 ### Dashboard View
-![Dashboard](assets/DASHBOARD.png)
+![Dashboard]([assets/DASHBOARD.png](https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard/blob/main/DASHBOARD.PNG))
 
 ## 🙌 Acknowledgments
 

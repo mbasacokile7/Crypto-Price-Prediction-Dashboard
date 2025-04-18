@@ -50,8 +50,8 @@ project-root/
 
 ## ⚙️ Installation
 ```bash
-git clone https://github.com/YOUR_USERNAME/neuracoin-dashboard.git
-cd neuracoin-dashboard
+git clone https://github.com/mbasacokile7/Crypto-Price-Prediction-Dashboard.git
+cd Crypto-Price-Prediction-Dashboard
 npm install
 ```
 
@@ -62,7 +62,7 @@ Create a .env file and add your AlphaVantage API key:
 Then start the server:
 
 ```bash
-npm run dev
+npm main.js
 ```
 
 ## 🌐 Usage
@@ -76,7 +76,11 @@ npm run dev
 
 ## 📸 Screenshots
 
-**INSERT PICTURE HERE**
+### Dashboard View
+![SELECTION PAGE](assets/SELECTION_PAGE.png)
+
+### Dashboard View
+![Dashboard](assets/DASHBOARD.png)
 
 ## 🙌 Acknowledgments
 

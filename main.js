@@ -49,6 +49,7 @@ app.get("/select", (req, res) =>{
   res.render("selection");
 });
 
+
 //Post request to get the cryptoprice data we need
 app.post("/fetch-data", async (req, res) =>{
 
@@ -141,6 +142,7 @@ app.post("/fetch-data", async (req, res) =>{
     
   } catch (error) {
     console.log(error)
+    res.render("error");
   }
 
   // =========================== Payload Preprocessing =========================== //

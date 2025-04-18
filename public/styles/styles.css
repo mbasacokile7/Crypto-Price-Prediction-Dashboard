@@ -458,3 +458,29 @@ select {
     font-weight: bold;
 }
   
+/* ===== ERROR PAGE STYLING ===== */
+#error-page{
+    background: linear-gradient(to bottom right, #1a1a1a, #000000);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+#error-btn{
+    padding: 12px;
+    background: linear-gradient(to bottom right, #657fa8, #041f4a);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+#error-btn:hover {
+    background: linear-gradient(45deg, #ccd5e3, #708ab3);
+}

@@ -278,11 +278,16 @@ footer {
     backdrop-filter: blur(10px);
     text-align: center;
     width: 350px;
+    overflow-x: auto;
 }
 
 /* == Form Groups == */
 .form-group {
     margin-bottom: 20px;
+    width: 100%;
+    max-width: 320px;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 label {
@@ -292,14 +297,28 @@ label {
     color: #bbb;
 }
 
+
+
 select {
     width: 100%;
+    max-width: 95vw; 
     padding: 10px;
     background: #222;
     color: white;
     border: 1px solid #444;
     border-radius: 5px;
     font-size: 16px;
+    box-sizing: border-box;
+    
+}
+
+
+/* Responsive behavior */
+@media (max-width: 600px) {
+    .form-group {
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 /* === Submit Button === */
@@ -355,6 +374,29 @@ select {
     min-height: 100vh;
     margin: 0;
 }
+
+.back-button {
+    position: fixed !important;
+    top: 4rem !important;
+    left: 1rem !important;
+    color: whitesmoke;
+    font-size: 1.125rem;
+    font-weight: 600;
+    z-index: 1000;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.back-button:hover {
+    color: #3b82f6;
+    
+}
+
+#dashboard-main-heading{
+    margin-top: 30px;
+    text-align: center;
+}
+
 /*== Chart % Metrics Div Styling ==*/
 
 .chart-box {

@@ -1,6 +1,12 @@
 <%- include('partials/header'); %>
+
+
 <section class="dashboard-sections">
-    <h1><%- userCoin %> Price Prediction and Insights</h1>
+    <a href="/select" class="back-button">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+    
+    <h1 id="dashboard-main-heading"><%- userCoin %> <%- selectedTimeFrame %> Price Analysis and Insights</h1>
     
     <div class="container py-4 dashboard-container-1">
         <div class="row g-3">
@@ -56,7 +62,7 @@
         </div>
 
         <!-- AI Insights -->
-        <div class="container py-4">
+        <div class="container py-4 insights-container">
             <div><%- insights %></div>
         </div>
     </div>

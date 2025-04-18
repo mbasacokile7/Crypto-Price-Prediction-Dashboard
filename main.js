@@ -114,7 +114,8 @@ app.post("/fetch-data", async (req, res) =>{
                                               - <p> for body text
                                               - Use <strong> for key points where relevant
                                               - The response should only be the content, Do Not Include the header meta-data
-
+                                              
+                  Your response should not be too technical, so that everyone can understand it.
                   Avoid including actual price predictions. Focus on analytical insights and trends only.`;
 
                   

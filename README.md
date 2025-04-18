@@ -80,7 +80,7 @@ npm main.js
 ![SELECTION PAGE](SELECTION_PAGE.PNG)
 
 ### Dashboard View
-![Dashboard]([DASHBOARD.PNG)
+![Dashboard](DASHBOARD.PNG)
 
 ## 🙌 Acknowledgments
 

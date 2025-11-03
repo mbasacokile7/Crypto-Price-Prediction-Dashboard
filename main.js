@@ -121,7 +121,7 @@ app.post("/fetch-data", async (req, res) =>{
 
                   
     let insight_data = {
-      "model": "deepseek/deepseek-chat-v3-0324:free",
+      "model": "deepseek/deepseek-chat-v3.1:free",
       "messages": [{"role": "user", "content": prompt }]
     
     }
@@ -148,7 +148,8 @@ app.post("/fetch-data", async (req, res) =>{
   // =========================== Payload Preprocessing =========================== //
   // ========Crypto Data ========//
   // Get Only the time series data:
-  let dataIndex = `Time Series (Digital Currency ${req.body.timeframe})`
+  console.log(alphaVatageResponse.data)
+  let dataIndex = `Time Series (Digital Currency ${selectedTimeFrame})`
   const timeSeriesData = alphaVatageResponse.data[dataIndex];
 
   // Convert the data to usable format
